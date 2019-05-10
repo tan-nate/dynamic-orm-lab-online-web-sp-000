@@ -53,11 +53,10 @@ class InteractiveRecord
   end
   
   def self.find_by(options={})
-    options.each do |property, value|
-      # self.send("#{property}=", value)
-      sql = self.send("SELECT * FROM #{self.table_name} WHERE #{property} = '#{value}'")
-      DB[:conn].execute(sql)
+    sql = options.collect do |property, value|
+      "SELECT * FROM #{self.table_name} WHERE #{property.to_s} = '#{value}'"
     end
-    # sql = "SELECT * FROM #{self.table_name} WHERE name = '#{name}'"
+    #binding.pry
+    DB[:conn].execute(sql[0])
   end
 end
